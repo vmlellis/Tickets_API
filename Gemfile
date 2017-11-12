@@ -19,6 +19,9 @@ gem 'puma', '~> 3.10'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1', '>= 3.1.11'
 
+# Authentication
+gem 'devise', '~> 4.3'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
