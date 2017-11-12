@@ -1,0 +1,14 @@
+http://blog.honeybadger.io/beginners-guide-to-angular-js-rails/
+
+https://stackoverflow.com/questions/34049956/generate-pdf-from-html-using-pdfmake-in-angularjs
+
+https://stackoverflow.com/questions/14242455/using-jquery-datatable-with-angularjs
+
+
+Requirements:
+- RVM
+- npm
+
+Comandos:
+npm install -g @angular/cli
+ng set --global packageManager=yarn
