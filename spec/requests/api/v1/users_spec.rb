@@ -97,4 +97,29 @@ RSpec.describe 'Users API', type: :request do
       end
     end
   end
+
+  describe 'DELETE / users/:id' do
+    before do
+      headers = { 'Accept' => 'application/vnd.core.v1' }
+      delete "/users/#{user_id}", params: {}, headers: headers
+    end
+
+    context 'when the user exists' do
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+
+      it 'removes the user from the database' do
+        expect(User.find_by(id: user.id)).to be_nil
+      end
+    end
+
+    context 'when the user does not exist' do
+      let(:user_id) { 1000 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
 end
