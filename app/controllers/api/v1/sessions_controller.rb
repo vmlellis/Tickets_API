@@ -1,4 +1,6 @@
 class Api::V1::SessionsController < ApplicationController
+  skip_before_action :authenticate_with_token!, only: %i[create destroy]
+
   def create
     user = User.find_by(email: session_params[:email])
 
