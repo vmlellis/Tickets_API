@@ -30,7 +30,7 @@ FactoryBot.define do
     email Faker::Internet.email
     password '123456'
     password_confirmation '123456'
-    role 'agent'
+    role 'customer'
     auth_token '123xyz@CUSTOMER'
   end
 end
