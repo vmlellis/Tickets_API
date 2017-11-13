@@ -25,7 +25,14 @@ class User < ApplicationRecord
     end
   end
 
-  def as_json(_)
+  def load_auth_token
+    return auth_token if auth_token.present?
+    new_token = Devise.friendly_token(32)
+    update_columns(auth_token: new_token)
+    new_token
+  end
+
+  def as_json(_ = {})
     super.merge(role: role_name)
   end
 end
