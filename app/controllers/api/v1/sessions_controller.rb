@@ -12,6 +12,12 @@ class Api::V1::SessionsController < ApplicationController
     end
   end
 
+  def destroy
+    user = User.find_by(auth_token: params[:id])
+    user.try(:remove_auth_token!)
+    head :no_content
+  end
+
   private
 
   def session_params

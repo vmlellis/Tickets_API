@@ -18,7 +18,7 @@ Rails.application.routes.draw do
                 version: 1, default: true
               ) do
       resources :users, only: %i[index show create update destroy]
-      resources :sessions, only: %i[create]
+      resources :sessions, only: %i[create destroy]
     end
   end
 end
