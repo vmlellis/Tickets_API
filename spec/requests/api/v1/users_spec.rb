@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Users API', type: :request do
+  before { host! 'api.domain.dev' }
   let!(:user) { create(:user) }
-  let(:user_id) { user.id }
   let(:headers) do
     {
       'Accept' => 'application/vnd.core.v1',
@@ -10,7 +10,7 @@ RSpec.describe 'Users API', type: :request do
     }
   end
 
-  before { host! 'api.domain.dev' }
+  let(:user_id) { user.id }
 
   describe 'GET users/:id' do
     before do

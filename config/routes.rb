@@ -2,9 +2,11 @@ require 'api_version_constraint'
 
 Rails.application.routes.draw do
   get '/', to: 'application#index'
-  post '/sign_in', to: 'sessions#create'
+  # post '/sign_in', to: 'sessions#create'
 
-  # resources :users, except: %i[new edit]
+  devise_for  :users,
+              only: %i[sessions],
+              controllers: { sessions: 'api/v1/sessions' }
 
   namespace :api,
             defaults: { format: :json },
@@ -16,6 +18,7 @@ Rails.application.routes.draw do
                 version: 1, default: true
               ) do
       resources :users, only: %i[index show create update destroy]
+      resources :sessions, only: %i[create]
     end
   end
 end

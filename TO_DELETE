@@ -21,3 +21,7 @@ IN THE HOSTS:
 
 Run specs:
 - Bundle exec spring rspec
+
+
+Adding controller:
+rails g controller api/v1/[controller] --no-test-framework

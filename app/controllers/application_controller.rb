@@ -5,6 +5,8 @@ class ApplicationController < ActionController::API
 
   # before_action :authenticate
 
+  rescue_from ActionController::RoutingError, with: -> { head :not_found }
+
   def index
     render json: { status: 'ok' }
   end
