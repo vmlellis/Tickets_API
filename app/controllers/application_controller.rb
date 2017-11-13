@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
 
   attr_reader :current_user
 
-  before_action :authenticate
+  # before_action :authenticate
 
   def index
     render json: { status: 'ok' }

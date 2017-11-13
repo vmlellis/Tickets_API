@@ -5,12 +5,18 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :email, presence: true, uniqueness: true
-  validates :name, presence: true
+  validates :name, :role, presence: true
 
   ROLES = %w[customer agent admin].freeze
 
-  def role=(name)
-    name = ROLES.index(name) if ROLES.include?(name)
-    write_attribute(:role, name) if ROLES[name]
+  def role_name
+    ROLES[role]
+  end
+
+  def role=(val)
+    val = ROLES.index(val) if ROLES.include?(val)
+    val = Integer(val) rescue nil
+    return if val.nil?
+    write_attribute(:role, val) if ROLES[val]
   end
 end

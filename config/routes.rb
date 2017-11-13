@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get '/', to: 'application#index'
   post '/sign_in', to: 'sessions#create'
 
-  resources :users, except: %i[new edit]
+  # resources :users, except: %i[new edit]
 
   namespace :api,
             defaults: { format: :json },
@@ -16,6 +16,7 @@ Rails.application.routes.draw do
               constraints: ApiVersionConstraint.new(
                 version: 1, default: true
               ) do
+      resources :users, only: %i[show]
     end
   end
 end
