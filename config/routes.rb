@@ -2,7 +2,6 @@ require 'api_version_constraint'
 
 Rails.application.routes.draw do
   get '/', to: 'application#index'
-  # post '/sign_in', to: 'sessions#create'
 
   devise_for  :users,
               only: %i[sessions],
