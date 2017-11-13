@@ -27,15 +27,20 @@ gem 'devise', '~> 4.3'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors', '~> 1.0', '>= 1.0.2', require: 'rack/cors'
 
+# Pagination
+gem 'will_paginate', '~> 3.1', '>= 3.1.6'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 
-  # Specs
-  gem 'rspec-rails', '~> 3.7', '>= 3.7.1'
-
   # Code Style checking tool
   gem 'rubocop', '~> 0.51.0'
+end
+
+group :test do
+  # Specs
+  gem 'rspec-rails', '~> 3.7', '>= 3.7.1'
 
   # Factories
   gem 'factory_bot_rails', '~> 4.8', '>= 4.8.2'

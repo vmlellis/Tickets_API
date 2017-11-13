@@ -2,7 +2,10 @@ class Api::V1::UsersController < ApplicationController
   respond_to :json
 
   def index
-    # TODO
+    users = User.all
+    render json: {
+      data: users, recordsTotal: users.count, recordsFiltered: users.count
+    }
   end
 
   def show

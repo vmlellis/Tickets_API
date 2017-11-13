@@ -15,7 +15,7 @@ Rails.application.routes.draw do
               constraints: ApiVersionConstraint.new(
                 version: 1, default: true
               ) do
-      resources :users, only: %i[show create update destroy]
+      resources :users, only: %i[index show create update destroy]
     end
   end
 end
