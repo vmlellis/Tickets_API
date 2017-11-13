@@ -9,6 +9,8 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :name, :role, presence: true
 
+  validates :auth_token, uniqueness: true
+
   ROLES = %w[customer agent admin].freeze
 
   def role_name

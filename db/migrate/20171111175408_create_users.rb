@@ -3,6 +3,7 @@ class CreateUsers < ActiveRecord::Migration[5.1]
     create_table :users do |t|
       t.string :name, null: false, default: ''
       t.integer :role, null: false
+      t.string :auth_token, :string, limit: 32
 
       ## Database authenticatable
       t.string :email,              null: false, default: ''
@@ -41,5 +42,6 @@ class CreateUsers < ActiveRecord::Migration[5.1]
     add_index :users, :reset_password_token, unique: true
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
+    add_index :users, :auth_token, unique: true
   end
 end
