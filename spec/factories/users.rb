@@ -8,7 +8,7 @@ FactoryBot.define do
   end
 
   factory :admin, class: User do
-    name 'User'
+    name Faker::Name
     email Faker::Internet.email
     password '123456'
     password_confirmation '123456'
@@ -17,11 +17,20 @@ FactoryBot.define do
   end
 
   factory :agent, class: User do
-    name 'User'
+    name Faker::Name
     email Faker::Internet.email
     password '123456'
     password_confirmation '123456'
     role 'agent'
     auth_token '123xyz@AGENT'
+  end
+
+  factory :customer, class: User do
+    name Faker::Name
+    email Faker::Internet.email
+    password '123456'
+    password_confirmation '123456'
+    role 'agent'
+    auth_token '123xyz@CUSTOMER'
   end
 end

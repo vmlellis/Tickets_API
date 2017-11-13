@@ -1,8 +1,6 @@
 module Api
   module V1
     class SessionsController < ApplicationController
-      respond_to :json
-
       skip_before_action :authenticate_with_token!, only: %i[create destroy]
 
       def create
