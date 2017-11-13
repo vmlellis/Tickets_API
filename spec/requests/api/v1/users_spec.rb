@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Users API', type: :request do
   before { host! 'api.domain.dev' }
+
   let!(:user) { create(:admin) }
   let(:headers) do
     {

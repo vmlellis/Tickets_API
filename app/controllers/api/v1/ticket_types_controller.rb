@@ -1,24 +1,12 @@
 module Api
   module V1
-    class TicketTypesController < ApplicationController
-      def index
-        # TODO
-      end
+    class TicketTypesController < RestController
+      before_action :authenticate_admin!
 
-      def show
-        # TODO
-      end
+      private
 
-      def create
-        # TODO
-      end
-
-      def update
-        # TODO
-      end
-
-      def destroy
-        # TODO
+      def resource_params
+        params.fetch(:ticket_type).permit(:name)
       end
     end
   end

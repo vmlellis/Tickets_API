@@ -1,2 +1,7 @@
-class Api::V1::TicketsController < ApplicationController
+module Api
+  module V1
+    class TicketsController < ApplicationController
+
+    end
+  end
 end
