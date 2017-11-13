@@ -22,7 +22,12 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update
-    # TODO
+    user = User.find(params[:id])
+    if user.update(user_params)
+      render json: user, status: :ok
+    else
+      render json: { errors: user.errors }, status: :unprocessable_entity
+    end
   end
 
   private
