@@ -5,3 +5,5 @@ Style/FrozenStringLiteralComment:
 AllCops:
   Excludes:
     - db/**/**
+    - spec/**/*_spec.rb
+    - spec/factories/*.rb

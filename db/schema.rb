@@ -31,13 +31,16 @@ ActiveRecord::Schema.define(version: 20171111180134) do
     t.bigint "ticket_type_id"
     t.string "title"
     t.string "description"
-    t.integer "status"
-    t.integer "created_by_id"
-    t.datetime "created_at"
+    t.integer "status", default: 0, null: false
+    t.integer "created_by_id", null: false
     t.integer "closed_by_id"
     t.datetime "closed_at"
     t.integer "agent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["agent_id"], name: "index_tickets_on_agent_id"
+    t.index ["closed_by_id"], name: "index_tickets_on_closed_by_id"
+    t.index ["created_by_id"], name: "index_tickets_on_created_by_id"
     t.index ["ticket_type_id"], name: "index_tickets_on_ticket_type_id"
   end
 

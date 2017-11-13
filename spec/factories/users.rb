@@ -5,6 +5,9 @@ FactoryBot.define do
     password '123456'
     password_confirmation '123456'
     role 'customer'
+    trait :with_token do
+      auth_token '123xyz@TOKEN'
+    end
   end
 
   factory :admin, class: User do
