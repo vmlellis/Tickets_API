@@ -1,15 +1,15 @@
 FactoryBot.define do
   factory :user do
-    name 'User'
-    email Faker::Internet.email
+    name { Faker::Name.name }
+    email { Faker::Internet.email }
     password '123456'
     password_confirmation '123456'
     role 'customer'
   end
 
   factory :admin, class: User do
-    name Faker::Name
-    email Faker::Internet.email
+    name { Faker::Name.name }
+    email { Faker::Internet.email }
     password '123456'
     password_confirmation '123456'
     role 'admin'
@@ -17,8 +17,8 @@ FactoryBot.define do
   end
 
   factory :agent, class: User do
-    name Faker::Name
-    email Faker::Internet.email
+    name { Faker::Name.name }
+    email { Faker::Internet.email }
     password '123456'
     password_confirmation '123456'
     role 'agent'
@@ -26,8 +26,8 @@ FactoryBot.define do
   end
 
   factory :customer, class: User do
-    name Faker::Name
-    email Faker::Internet.email
+    name { Faker::Name.name }
+    email { Faker::Internet.email }
     password '123456'
     password_confirmation '123456'
     role 'customer'
