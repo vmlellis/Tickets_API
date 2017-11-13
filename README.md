@@ -14,7 +14,7 @@ rake db:create
 ```
 rails db:migrate
 ```
-- Initial populate:
+- Populate:
 ```
 rails db:seed
 ```
