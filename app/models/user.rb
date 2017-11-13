@@ -1,6 +1,23 @@
 require 'utils'
 
 class User < ApplicationRecord
+  ROLES = %w[customer agent admin].freeze
+
+  has_many  :created_tickets,
+            foreign_key: 'created_by_id',
+            class_name: 'Ticket',
+            dependent: :restrict_with_error
+
+  has_many  :support_tickets,
+            foreign_key: 'agent_id',
+            class_name: 'Ticket',
+              dependent: :restrict_with_error
+
+  has_many  :closed_tickets,
+            foreign_key: 'closed_by_id',
+            class_name: 'Ticket',
+            dependent: :restrict_with_error
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -10,8 +27,6 @@ class User < ApplicationRecord
   validates :name, :role, presence: true
 
   validates :auth_token, uniqueness: true, allow_blank: true
-
-  ROLES = %w[customer agent admin].freeze
 
   def role_name
     ROLES[role]

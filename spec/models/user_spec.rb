@@ -3,6 +3,24 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   let(:user) { build(:user) }
 
+  it do
+    is_expected.to have_many(:created_tickets)
+      .class_name('Ticket')
+      .dependent(:restrict_with_error)
+  end
+
+  it do
+    is_expected.to have_many(:support_tickets)
+      .class_name('Ticket')
+      .dependent(:restrict_with_error)
+  end
+
+  it do
+    is_expected.to have_many(:closed_tickets)
+      .class_name('Ticket')
+      .dependent(:restrict_with_error)
+  end
+
   it { expect(user).to respond_to(:email) }
   it { expect(user).to respond_to(:name) }
   it { expect(user).to respond_to(:password) }
