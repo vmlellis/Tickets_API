@@ -9,7 +9,7 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :name, :role, presence: true
 
-  validates :auth_token, uniqueness: true
+  validates :auth_token, uniqueness: true, allow_blank: true
 
   ROLES = %w[customer agent admin].freeze
 
@@ -25,11 +25,13 @@ class User < ApplicationRecord
     end
   end
 
-  def load_auth_token
+  def generate_auth_token!
     return auth_token if auth_token.present?
     new_token = Devise.friendly_token(32)
     update_columns(auth_token: new_token)
     new_token
+  rescue ActiveRecord::RecordNotUnique
+    generate_auth_token!
   end
 
   def as_json(_ = {})

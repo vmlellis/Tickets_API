@@ -17,3 +17,7 @@ ng set --global packageManager=yarn
 IN THE HOSTS:
 # Setup for rails applications
 127.0.0.1 api.tickets.dev
+
+
+Run specs:
+- Bundle exec spring rspec
