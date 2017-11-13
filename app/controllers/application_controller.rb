@@ -7,9 +7,9 @@ class ApplicationController < ActionController::API
 
   # rescue_from ActionController::RoutingError, with: -> { head :not_found }
 
-  # def index
-  #   render json: { status: 'ok' }
-  # end
+  def index
+    render json: { status: 'ok' }
+  end
 
   # private
 

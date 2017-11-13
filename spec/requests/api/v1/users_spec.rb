@@ -26,6 +26,15 @@ RSpec.describe 'Users API', type: :request do
     it 'returns a list of users in data'
 
     it 'returns total of records'
+
+    context 'when current user is customer' do
+      let(:customer) { create(:customer) }
+      let(:authorization) { customer.auth_token }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 
   describe 'GET /users/:id' do
