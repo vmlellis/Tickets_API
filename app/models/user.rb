@@ -1,3 +1,5 @@
+require 'utils'
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -14,9 +16,14 @@ class User < ApplicationRecord
   end
 
   def role=(val)
-    val = ROLES.index(val) if ROLES.include?(val)
-    val = Integer(val) rescue nil
-    return if val.nil?
-    write_attribute(:role, val) if ROLES[val]
+    if ROLES.include?(val)
+      write_attribute(:role, ROLES.index(val))
+    elsif Utils.int?(val) && ROLES[val.to_i]
+      write_attribute(:role, val)
+    end
+  end
+
+  def as_json(_)
+    super.merge(role: role_name)
   end
 end

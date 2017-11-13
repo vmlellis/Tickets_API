@@ -2,3 +2,8 @@ Documentation:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+AllCops:
+  Excludes:
+    - db/**/**

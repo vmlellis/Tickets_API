@@ -1,5 +1,5 @@
 class SessionsController < ApplicationController
-  skip_before_action :authenticate, only: [:create]
+  # skip_before_action :authenticate, only: [:create]
   before_action :validate_presence, only: [:create]
 
   def create
