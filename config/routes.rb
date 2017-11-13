@@ -18,6 +18,7 @@ Rails.application.routes.draw do
               ) do
       resources :users, only: %i[index show create update destroy]
       resources :sessions, only: %i[create destroy]
+      resources :user, only: %i[show update]
     end
   end
 end

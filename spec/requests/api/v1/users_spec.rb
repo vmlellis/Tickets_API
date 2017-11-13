@@ -2,11 +2,12 @@ require 'rails_helper'
 
 RSpec.describe 'Users API', type: :request do
   before { host! 'api.domain.dev' }
-  let!(:user) { create(:user) }
+  let!(:user) { create(:admin) }
   let(:headers) do
     {
       'Accept' => 'application/vnd.core.v1',
-      'Content-Type' => Mime[:json].to_s
+      'Content-Type' => Mime[:json].to_s,
+      'Authorization' => user.auth_token
     }
   end
 

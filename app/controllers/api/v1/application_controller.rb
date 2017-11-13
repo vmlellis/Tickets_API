@@ -1,5 +1,11 @@
-class Api::V1::ApplicationController < ApplicationController
-  include Authenticable
+module Api
+  module V1
+    class ApplicationController < ActionController::API
+      include Authenticable
 
-  # before_action :authenticate!
+      respond_to :json
+
+      before_action :authenticate_with_token!
+    end
+  end
 end
