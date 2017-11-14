@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Ticket Types API', type: :request do
   before { host! 'api.domain.dev' }
+  let!(:endpoint) { '/ticket_types' }
 
   let!(:user) { create(:admin) }
   let(:headers) do
@@ -16,7 +17,7 @@ RSpec.describe 'Ticket Types API', type: :request do
   describe 'GET /ticket_types' do
     before do
       create_list(:ticket_type, 3)
-      get '/ticket_types', params: {}, headers: headers
+      get endpoint, params: {}, headers: headers
     end
 
     it 'returns status code 200' do
@@ -50,7 +51,7 @@ RSpec.describe 'Ticket Types API', type: :request do
     let(:ticket_type) { create(:ticket_type) }
 
     before do
-      get "/ticket_types/#{ticket_type.id}", params: {}, headers: headers
+      get "#{endpoint}/#{ticket_type.id}", params: {}, headers: headers
     end
 
     it 'returns status code 200' do

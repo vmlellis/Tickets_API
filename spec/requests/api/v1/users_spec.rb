@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Users API', type: :request do
   before { host! 'api.domain.dev' }
+  let!(:endpoint) { '/users' }
 
   let!(:user) { create(:admin) }
   let(:headers) do
@@ -17,7 +18,7 @@ RSpec.describe 'Users API', type: :request do
 
   describe 'GET /users' do
     before do
-      get '/users', params: {}, headers: headers
+      get endpoint, params: {}, headers: headers
     end
 
     it 'returns status code 200' do
@@ -39,9 +40,7 @@ RSpec.describe 'Users API', type: :request do
   end
 
   describe 'GET /users/:id' do
-    before do
-      get "/users/#{user_id}", params: {}, headers: headers
-    end
+    before { get "#{endpoint}/#{user_id}", params: {}, headers: headers }
 
     context 'when the user exists' do
       it 'returns status code 200' do
@@ -64,7 +63,7 @@ RSpec.describe 'Users API', type: :request do
 
   describe 'POST /users' do
     before do
-      post '/users', params: { user: user_params }.to_json, headers: headers
+      post endpoint, params: { user: user_params }.to_json, headers: headers
     end
 
     context 'when the request params are valid' do
@@ -95,7 +94,7 @@ RSpec.describe 'Users API', type: :request do
   describe 'PUT /users/:id' do
     before do
       params = { user: user_params }
-      put "/users/#{user_id}", params: params.to_json, headers: headers
+      put "#{endpoint}/#{user_id}", params: params.to_json, headers: headers
     end
 
     context 'when the request params are valid' do
@@ -125,7 +124,7 @@ RSpec.describe 'Users API', type: :request do
 
   describe 'DELETE /users/:id' do
     before do
-      delete "/users/#{user_id}", params: {}, headers: headers
+      delete "#{endpoint}/#{user_id}", params: {}, headers: headers
     end
 
     context 'when the user exists' do
@@ -152,7 +151,7 @@ RSpec.describe 'Users API', type: :request do
     let(:authorization) { current_user.auth_token }
 
     before do
-      get '/users/current', params: {}, headers: headers
+      get "#{endpoint}/current", params: {}, headers: headers
     end
 
     it 'returns status code 200' do
@@ -170,7 +169,7 @@ RSpec.describe 'Users API', type: :request do
 
     before do
       params = { user: user_params }
-      put '/users/current', params: params.to_json, headers: headers
+      put "#{endpoint}/current", params: params.to_json, headers: headers
     end
 
     context 'when the request params are valid' do
