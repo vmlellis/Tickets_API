@@ -28,6 +28,10 @@ class User < ApplicationRecord
 
   validates :auth_token, uniqueness: true, allow_blank: true
 
+  scope :admins, -> { where(role: ROLES.index('admin')) }
+  scope :agents, -> { where(role: ROLES.index('agent')) }
+  scope :customers, -> { where(role: ROLES.index('customer')) }
+
   ROLES.each do |role_name|
     define_method("#{role_name}?") { role == ROLES.index(role_name) }
   end
@@ -59,5 +63,9 @@ class User < ApplicationRecord
 
   def as_json(_ = {})
     super.merge(role: role_name)
+  end
+
+  def self.random_agent
+    agents.order('RAND()').first
   end
 end

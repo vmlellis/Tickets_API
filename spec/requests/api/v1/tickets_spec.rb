@@ -18,7 +18,9 @@ RSpec.describe 'Tickets API', type: :request do
 
   describe 'GET /tickets' do
     before do
-      create_list(:ticket, 5, created_by: customer, agent: agent)
+      ticket_type = create(:ticket_type)
+      opts = { created_by: customer, agent: agent, ticket_type: ticket_type }
+      create_list(:ticket, 5, opts)
       get endpoint, params: {}, headers: headers
     end
 
@@ -46,16 +48,52 @@ RSpec.describe 'Tickets API', type: :request do
   end
 
   describe 'POST /tickets' do
+    before do
+      params = { ticket: ticket_params }
+      post endpoint, params: params.to_json, headers: headers
+    end
+
     context 'when the request params are valid' do
-      it 'returns status code 201'
-      it 'saves the ticket type in the database'
-      it 'returns json data for the created ticket type'
-      it 'assigns the created ticket to the current user'
-      it 'assigns the created ticket to an agent'
+      let!(:customer) { create(:customer) }
+
+      let(:ticket_params) do
+        ticket_type = create(:ticket_type)
+        attributes_for(:ticket).merge(ticket_type_id: ticket_type.id)
+      end
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+
+      it 'saves the ticket in the database' do
+        obj = Ticket.find_by(title: ticket_params[:title])
+        expect(obj).not_to be_nil
+      end
+
+      it 'returns json data for the created ticket type' do
+        expect(json_body[:description]).to eq(ticket_params[:description])
+      end
+
+      it 'assigns the created ticket to the current user' do
+        expect(json_body[:created_by_id]).to eq(user.id)
+      end
+
+      it 'assigns the created ticket to an agent' do
+        allow(User).to receive(:random_agent).and_return(agent)
+        expect(json_body[:agent_id]).to eq(agent.id)
+      end
 
       context 'when current user is agent' do
-        it 'returns status code 401'
+        let(:authorization) { agent.auth_token }
+
+        it 'returns status code 401' do
+          expect(response).to have_http_status(401)
+        end
       end
     end
   end
+
+  describe 'PUT /tickets/:id'
+
+  describe 'DELETE /tickets/:id'
 end

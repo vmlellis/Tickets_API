@@ -1,10 +1,9 @@
 class CreateTickets < ActiveRecord::Migration[5.1]
   def change
     create_table :tickets do |t|
-      t.string :identity
       t.references :ticket_type, foreign_key: true
-      t.string :title
-      t.string :description
+      t.text :title, null: false
+      t.text :description, null: false
       t.integer :status, default: 0, null: false
       t.integer :created_by_id,
                 null: false, foreign_key: { to_table: :user }, index: true

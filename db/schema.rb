@@ -27,10 +27,9 @@ ActiveRecord::Schema.define(version: 20171111180134) do
   end
 
   create_table "tickets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "identity"
     t.bigint "ticket_type_id"
-    t.string "title"
-    t.string "description"
+    t.text "title", null: false
+    t.text "description", null: false
     t.integer "status", default: 0, null: false
     t.integer "created_by_id", null: false
     t.integer "closed_by_id"

@@ -11,9 +11,9 @@ RSpec.describe Ticket, type: :model do
   it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_presence_of(:description) }
   it { is_expected.to validate_presence_of(:created_by_id) }
-  it { is_expected.to validate_presence_of(:created_at) }
   it { is_expected.to validate_presence_of(:agent_id) }
   it { is_expected.to validate_presence_of(:ticket_type_id) }
+  it { is_expected.to validate_presence_of(:identity) }
 
   it { is_expected.to respond_to(:title) }
   it { is_expected.to respond_to(:description) }

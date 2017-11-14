@@ -16,7 +16,7 @@ RSpec.describe 'Ticket Types API', type: :request do
 
   describe 'GET /ticket_types' do
     before do
-      create_list(:ticket_type, 3)
+      3.times { create(:ticket_type) }
       get endpoint, params: {}, headers: headers
     end
 
@@ -106,6 +106,7 @@ RSpec.describe 'Ticket Types API', type: :request do
 
   describe 'PUT /ticket_types/:id' do
     let!(:ticket_type) { create(:ticket_type) }
+
     before do
       params = { ticket_type: ticket_type_params }.to_json
       put "#{endpoint}/#{ticket_type.id}", params: params, headers: headers

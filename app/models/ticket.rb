@@ -6,8 +6,8 @@ class Ticket < ApplicationRecord
   belongs_to :closed_by, class_name: 'User', optional: true
   belongs_to :ticket_type
 
-  validates :title, :description, :created_by_id, :created_at, :agent_id,
-            :ticket_type_id, presence: true
+  validates :title, :description, :created_by_id, :agent_id, :ticket_type_id,
+            presence: true
 
   def status_name
     STATUS[status.to_i]
