@@ -85,6 +85,10 @@ RSpec.describe User, type: :model do
     let(:role) { 'admin' }
     let(:user) { build(:user, role: role) }
 
+    it { expect(user).to be_admin }
+    it { expect(user).to_not be_agent }
+    it { expect(user).to_not be_customer }
+
     describe '#role_name' do
       it 'returns the name of the role' do
         expect(user.role_name).to eq(role)
@@ -102,6 +106,10 @@ RSpec.describe User, type: :model do
     let(:role) { 'agent' }
     let(:user) { build(:user, role: role) }
 
+    it { expect(user).to_not be_admin }
+    it { expect(user).to be_agent }
+    it { expect(user).to_not be_customer }
+
     describe '#role_name' do
       it 'returns the name of the role' do
         expect(user.role_name).to eq(role)
@@ -118,6 +126,10 @@ RSpec.describe User, type: :model do
   context 'when role is customer' do
     let(:role) { 'customer' }
     let(:user) { build(:user, role: role) }
+
+    it { expect(user).to_not be_admin }
+    it { expect(user).to_not be_agent }
+    it { expect(user).to be_customer }
 
     describe '#role_name' do
       it 'returns the name of the role' do

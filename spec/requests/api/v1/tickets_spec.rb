@@ -3,7 +3,9 @@ require 'rails_helper'
 RSpec.describe 'Tickets API', type: :request do
   before { host! 'api.domain.dev' }
 
-  let!(:user) { create(:customer) }
+  let!(:customer) { create(:customer) }
+  let!(:agent) { create(:agent) }
+  let!(:user) { create(:admin)  }
   let(:headers) do
     {
       'Accept' => 'application/vnd.core.v1',
@@ -15,15 +17,16 @@ RSpec.describe 'Tickets API', type: :request do
 
   describe 'GET /tickets' do
     before do
-      create_list(:ticket, 5, user_id: user.id)
+      create_list(:ticket, 5, created_by: customer, agent: agent)
+      get '/tickets', params: {}, headers: headers
     end
 
     it 'returns status code 200' do
-      pending
+      expect(response).to have_http_status(200)
     end
 
     it 'returns 5 tickets from database' do
-      expect(json_body[:data]).to matcher.to eq(5)
+      expect(json_body[:records].count).to eq(5)
     end
   end
 end

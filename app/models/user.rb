@@ -28,6 +28,10 @@ class User < ApplicationRecord
 
   validates :auth_token, uniqueness: true, allow_blank: true
 
+  ROLES.each do |role_name|
+    define_method("#{role_name}?") { role == ROLES.index(role_name) }
+  end
+
   def role_name
     ROLES[role]
   end

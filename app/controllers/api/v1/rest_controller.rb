@@ -2,11 +2,13 @@ module Api
   module V1
     class RestController < ApplicationController
       def index
-        resources = model.all
+        keys = %i[start lenght order search]
+        filter_opts = keys.each_with_object({}) { |k, res| res[k] = params[k] }
+        resources = index_filter(filter_opts)
         render json: {
-          data: resources,
-          recordsTotal: resources.count,
-          recordsFiltered: resources.count
+          records: resources,
+          total: resources.count,
+          filtered: model.count
         }
       end
 
@@ -49,6 +51,10 @@ module Api
 
       def model
         controller_name.classify.constantize
+      end
+
+      def index_filter(_)
+        model.all
       end
     end
   end

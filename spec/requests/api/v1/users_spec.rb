@@ -24,7 +24,7 @@ RSpec.describe 'Users API', type: :request do
       expect(response).to have_http_status(200)
     end
 
-    it 'returns a list of users in data'
+    it 'returns a list of users'
 
     it 'returns total of records'
 
@@ -123,7 +123,7 @@ RSpec.describe 'Users API', type: :request do
     end
   end
 
-  describe 'DELETE / users/:id' do
+  describe 'DELETE /users/:id' do
     before do
       delete "/users/#{user_id}", params: {}, headers: headers
     end

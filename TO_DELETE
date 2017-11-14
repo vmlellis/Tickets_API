@@ -25,3 +25,6 @@ Run specs:
 
 Adding controller:
 rails g controller api/v1/[controller] --no-test-framework
+
+
+https://github.com/l-lin/angular-datatables/issues/340
