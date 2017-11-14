@@ -17,29 +17,47 @@ RSpec.describe 'Users API', type: :request do
   let(:user_id) { user.id }
 
   describe 'GET /users' do
-    before do
-      create_list(:user, 5)
-      get endpoint, params: {}, headers: headers
+    context 'when no filter is sent' do
+      before do
+        create_list(:user, 5)
+        get endpoint, params: {}, headers: headers
+      end
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns 6 users from database' do
+        expect(json_body[:records].count).to eq(6)
+      end
+
+      it 'returns total of records equal to 6' do
+        expect(json_body[:total]).to eq(6)
+      end
+
+      context 'when current user is customer' do
+        let(:customer) { create(:customer) }
+        let(:authorization) { customer.auth_token }
+
+        it 'returns status code 401' do
+          expect(response).to have_http_status(401)
+        end
+      end
     end
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
-    end
+    context 'when filter params is sent' do
+      let!(:user1) { create(:user, name: 'John Wick') }
+      let!(:user2) { create(:user, name: 'Matthew Wick') }
+      let!(:user3) { create(:user, name: 'Doug Thomas') }
 
-    it 'returns 6 users from database' do
-      expect(json_body[:records].count).to eq(6)
-    end
+      before do
+        get "#{endpoint}?q[name_cont]=wick", params: {}, headers: headers
+      end
 
-    it 'returns total of records equal to 6' do
-      expect(json_body[:total]).to eq(6)
-    end
+      it 'returns only the users matching' do
+        returned_user_names = json_body[:records].map { |t| t[:name] }
 
-    context 'when current user is customer' do
-      let(:customer) { create(:customer) }
-      let(:authorization) { customer.auth_token }
-
-      it 'returns status code 401' do
-        expect(response).to have_http_status(401)
+        expect(returned_user_names).to eq([user1.name, user2.name])
       end
     end
   end
