@@ -43,7 +43,6 @@ RSpec.describe 'Auth API', type: :request do
     end
   end
 
-  # Registration
   describe 'POST /auth' do
     before { post endpoint, params: user_params.to_json, headers: headers }
 
@@ -72,7 +71,6 @@ RSpec.describe 'Auth API', type: :request do
     end
   end
 
-  # Update
   describe 'PUT /auth' do
     before { put endpoint, params: user_params.to_json, headers: headers }
 
@@ -151,6 +149,24 @@ RSpec.describe 'Auth API', type: :request do
       it 'returns the json data for the errors' do
         expect(json_body).to have_key(:errors)
       end
+    end
+  end
+
+  describe 'DELETE /auth/sign_out' do
+    let!(:user) { create(:user, auth_token: 'abc123xyz') }
+    let(:auth_token) { user.auth_token }
+
+    before { delete "#{endpoint}/sign_out", params: {}, headers: headers }
+
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
+    end
+
+    it 'changes the user auth token' do
+      user.reload
+      expect(user).not_to be_valid_token(
+        auth_data['access-token'], auth_data['client']
+      )
     end
   end
 end

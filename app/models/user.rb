@@ -50,19 +50,6 @@ class User < ApplicationRecord
     end
   end
 
-  def generate_auth_token!
-    return auth_token if auth_token.present?
-    new_token = Devise.friendly_token(32)
-    update_columns(auth_token: new_token)
-    new_token
-  rescue ActiveRecord::RecordNotUnique
-    generate_auth_token!
-  end
-
-  def remove_auth_token!
-    update_columns(auth_token: nil) if auth_token.present?
-  end
-
   def as_json(_ = {})
     super.merge(role: role_name)
   end

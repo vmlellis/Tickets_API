@@ -38,49 +38,6 @@ RSpec.describe User, type: :model do
   it { expect(user).to validate_uniqueness_of(:email).case_insensitive }
   it { expect(user).to allow_value('user@user.com').for(:email) }
 
-  describe '#generate_auth_token!' do
-    let!(:user) { create(:user) }
-
-    before { allow(Devise).to receive(:friendly_token).and_return('abc123xyz') }
-
-    context 'when current auth_token is null' do
-      before { user.auth_token = nil }
-
-      it 'generates a unique auth token' do
-        expect(user.generate_auth_token!).to eq('abc123xyz')
-      end
-
-      context 'when the current auth token already has been taken' do
-        it 'generates another auth token' do
-          user_opts = { auth_token: 'abc123xyz', email: Faker::Internet.email }
-          existing_user = create(:user, user_opts)
-
-          allow(Devise)
-            .to receive(:friendly_token)
-            .and_return('abc123xyz', 'abc123xyz', '123XYZtoken')
-
-          expect(user.generate_auth_token!).not_to eq(existing_user.auth_token)
-        end
-      end
-    end
-
-    context 'when current auth_token is empty' do
-      before { user.auth_token = '' }
-
-      it 'generates a unique auth token' do
-        expect(user.generate_auth_token!).to eq('abc123xyz')
-      end
-    end
-
-    context 'when current auth_token is present' do
-      before { user.auth_token = 'TOKEN@123' }
-
-      it 'returns current token' do
-        expect(user.generate_auth_token!).to eq('TOKEN@123')
-      end
-    end
-  end
-
   context 'when role is admin' do
     let(:role) { 'admin' }
     let(:user) { build(:user, role: role) }
