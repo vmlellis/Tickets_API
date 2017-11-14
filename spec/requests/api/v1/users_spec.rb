@@ -123,9 +123,7 @@ RSpec.describe 'Users API', type: :request do
   end
 
   describe 'DELETE /users/:id' do
-    before do
-      delete "#{endpoint}/#{user_id}", params: {}, headers: headers
-    end
+    before { delete "#{endpoint}/#{user_id}", params: {}, headers: headers }
 
     context 'when the user exists' do
       it 'returns status code 204' do

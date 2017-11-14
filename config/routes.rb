@@ -23,7 +23,7 @@ Rails.application.routes.draw do
         end
       end
       resources :sessions, only: %i[create destroy]
-      resources :ticket_types, only: %i[index show create]
+      resources :ticket_types, only: %i[index show create update destroy]
       resources :tickets, only: %i[index show]
     end
   end
