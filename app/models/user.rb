@@ -30,8 +30,6 @@ class User < ApplicationRecord
   validates :email, presence: true, uniqueness: true
   validates :name, :role, presence: true
 
-  validates :auth_token, uniqueness: true, allow_blank: true
-
   scope :admins, -> { where(role: ROLES.index('admin')) }
   scope :agents, -> { where(role: ROLES.index('agent')) }
   scope :customers, -> { where(role: ROLES.index('customer')) }

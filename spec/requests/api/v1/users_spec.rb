@@ -39,7 +39,7 @@ RSpec.describe 'Users API', type: :request do
 
       context 'when current user is customer' do
         let(:customer) { create(:customer) }
-        let(:authorization) { customer.auth_token }
+        let(:auth_data) { customer.create_new_auth_token }
 
         it 'returns status code 401' do
           expect(response).to have_http_status(401)
@@ -160,13 +160,21 @@ RSpec.describe 'Users API', type: :request do
   describe 'DELETE /users/:id' do
     before { delete "#{endpoint}/#{user_id}", params: {}, headers: headers }
 
+    context 'when the user is current user' do
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+    end
+
     context 'when the user exists' do
+      let!(:other_user) { create(:admin, email: 'other@email.com') }
+      let(:user_id) { other_user.id }
       it 'returns status code 204' do
         expect(response).to have_http_status(204)
       end
 
       it 'removes the user from the database' do
-        expect(User.find_by(id: user.id)).to be_nil
+        expect(User.find_by(id: other_user.id)).to be_nil
       end
     end
 
@@ -175,57 +183,6 @@ RSpec.describe 'Users API', type: :request do
 
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
-      end
-    end
-  end
-
-  describe 'GET /users/current' do
-    let!(:current_user) { create(:customer) }
-    let(:authorization) { current_user.auth_token }
-
-    before do
-      get "#{endpoint}/current", params: {}, headers: headers
-    end
-
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
-    end
-
-    it 'returns the current user' do
-      expect(json_body[:id]).to eq(current_user.id)
-    end
-  end
-
-  describe 'PUT /users/current' do
-    let!(:current_user) { create(:customer) }
-    let(:authorization) { current_user.auth_token }
-
-    before do
-      params = { user: user_params }
-      put "#{endpoint}/current", params: params.to_json, headers: headers
-    end
-
-    context 'when the request params are valid' do
-      let(:user_params) { { name: 'NEW NAME' } }
-
-      it 'returns status code 200' do
-        expect(response).to have_http_status(200)
-      end
-
-      it 'returns the json data for the updated user' do
-        expect(json_body[:name]).to eq(user_params[:name])
-      end
-    end
-
-    context 'when the request params are invalid' do
-      let(:user_params) { { name: '' } }
-
-      it 'returns status code 422' do
-        expect(response).to have_http_status(422)
-      end
-
-      it 'returns the json data for the errors' do
-        expect(json_body).to have_key(:errors)
       end
     end
   end

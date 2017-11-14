@@ -9,10 +9,12 @@ RSpec.describe 'Ticket Types API', type: :request do
     {
       'Accept' => 'application/vnd.core.v1',
       'Content-Type' => Mime[:json].to_s,
-      'Authorization' => authorization
+      'access-token' => auth_data['access-token'],
+      'uid' => auth_data['uid'],
+      'client' => auth_data['client']
     }
   end
-  let(:authorization) { user.auth_token }
+  let(:auth_data) { user.create_new_auth_token }
 
   describe 'GET /ticket_types' do
     before do
@@ -30,7 +32,7 @@ RSpec.describe 'Ticket Types API', type: :request do
 
     context 'when user is agent' do
       let(:agent) { create(:agent) }
-      let(:authorization) { agent.auth_token }
+      let(:auth_data) { agent.create_new_auth_token }
 
       it 'returns status code 401' do
         expect(response).to have_http_status(401)
@@ -39,7 +41,7 @@ RSpec.describe 'Ticket Types API', type: :request do
 
     context 'when user is customer' do
       let(:customer) { create(:customer) }
-      let(:authorization) { customer.auth_token }
+      let(:auth_data) { customer.create_new_auth_token }
 
       it 'returns status code 401' do
         expect(response).to have_http_status(401)

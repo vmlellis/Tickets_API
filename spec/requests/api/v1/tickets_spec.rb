@@ -9,14 +9,16 @@ RSpec.describe 'Tickets API', type: :request do
   let!(:agent) { create(:agent) }
 
   let!(:user) { admin }
+  let!(:auth_data) { user.create_new_auth_token }
   let(:headers) do
     {
       'Accept' => 'application/vnd.core.v1',
       'Content-Type' => Mime[:json].to_s,
-      'Authorization' => authorization
+      'access-token' => auth_data['access-token'],
+      'uid' => auth_data['uid'],
+      'client' => auth_data['client']
     }
   end
-  let(:authorization) { user.auth_token }
 
   describe 'GET /tickets' do
     before do
@@ -86,7 +88,7 @@ RSpec.describe 'Tickets API', type: :request do
       end
 
       context 'when current user is agent' do
-        let(:authorization) { agent.auth_token }
+        let(:auth_data) { agent.create_new_auth_token }
 
         it 'returns status code 401' do
           expect(response).to have_http_status(401)
@@ -120,7 +122,7 @@ RSpec.describe 'Tickets API', type: :request do
       end
 
       context 'when current user is the agent of the ticket' do
-        let(:authorization) { agent.auth_token }
+        let(:auth_data) { agent.create_new_auth_token }
 
         it 'returns status code 200' do
           expect(response).to have_http_status(200)
@@ -131,7 +133,7 @@ RSpec.describe 'Tickets API', type: :request do
         let(:other_customer) do
           create(:customer, auth_token: Devise.friendly_token)
         end
-        let(:authorization) { other_customer.auth_token }
+        let(:auth_data) { other_customer.create_new_auth_token }
 
         it 'returns status code 404' do
           expect(response).to have_http_status(404)
@@ -142,7 +144,7 @@ RSpec.describe 'Tickets API', type: :request do
         let(:other_agent) do
           create(:customer, auth_token: Devise.friendly_token)
         end
-        let(:authorization) { other_agent.auth_token }
+        let(:auth_data) { other_agent.create_new_auth_token }
 
         it 'returns status code 404' do
           expect(response).to have_http_status(404)
@@ -170,7 +172,7 @@ RSpec.describe 'Tickets API', type: :request do
 
   describe 'DELETE /tickets/:id' do
     let!(:ticket) { create(:ticket) }
-    let(:authorization) { admin.auth_token }
+    let(:auth_data) { admin.create_new_auth_token }
 
     before do
       delete "#{endpoint}/#{ticket_id}", params: {}, headers: headers
@@ -190,7 +192,7 @@ RSpec.describe 'Tickets API', type: :request do
       end
 
       context 'when current user is agent' do
-        let(:authorization) { agent.auth_token }
+        let(:auth_data) { agent.create_new_auth_token }
 
         it 'returns status code 401' do
           expect(response).to have_http_status(401)
@@ -198,7 +200,7 @@ RSpec.describe 'Tickets API', type: :request do
       end
 
       context 'when current user is customer' do
-        let(:authorization) { customer.auth_token }
+        let(:auth_data) { customer.create_new_auth_token }
 
         it 'returns status code 401' do
           expect(response).to have_http_status(401)

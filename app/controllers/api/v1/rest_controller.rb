@@ -43,6 +43,7 @@ module Api
 
       def destroy
         resource = model.find(params[:id])
+        yield resource if block_given?
         resource.destroy
         head :no_content
       rescue ActiveRecord::RecordNotFound
