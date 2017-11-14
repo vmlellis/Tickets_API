@@ -64,6 +64,27 @@ RSpec.describe 'Ticket Types API', type: :request do
   end
 
   describe 'POST /ticket_types' do
+    before do
+      params = { ticket_type: ticket_type_params }
+      post endpoint, params: params.to_json, headers: headers
+    end
+
+    context 'when the request params are valid' do
+      let(:ticket_type_params) { attributes_for(:ticket_type) }
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+
+      it 'saves the ticket type in the database' do
+        obj = TicketType.find_by(name: ticket_type_params[:name])
+        expect(obj).not_to be_nil
+      end
+
+      it 'returns json data for the created ticket type' do
+        expect(json_body[:name]).to eq(ticket_type_params[:name])
+      end
+    end
   end
 
   describe 'PUT /ticket_types/:id' do

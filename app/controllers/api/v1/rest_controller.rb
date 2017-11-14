@@ -21,6 +21,7 @@ module Api
 
       def create
         resource = model.new(resource_params)
+        yield resource if block_given?
         if resource.save
           render json: resource, status: :created
         else
@@ -31,6 +32,7 @@ module Api
 
       def update
         resource = model.find(params[:id])
+        yield resource if block_given?
         if resource.update(resource_params)
           render json: resource, status: :ok
         else

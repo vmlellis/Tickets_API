@@ -44,4 +44,18 @@ RSpec.describe 'Tickets API', type: :request do
       expect(json_body[:title]).to eq(ticket.title)
     end
   end
+
+  describe 'POST /tickets' do
+    context 'when the request params are valid' do
+      it 'returns status code 201'
+      it 'saves the ticket type in the database'
+      it 'returns json data for the created ticket type'
+      it 'assigns the created ticket to the current user'
+      it 'assigns the created ticket to an agent'
+
+      context 'when current user is agent' do
+        it 'returns status code 401'
+      end
+    end
+  end
 end
