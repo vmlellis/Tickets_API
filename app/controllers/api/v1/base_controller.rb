@@ -1,6 +1,7 @@
 module Api
   module V1
-    class ApplicationController < ActionController::API
+    class BaseController < ActionController::API
+      include DeviseTokenAuth::Concerns::SetUserByToken
       include Authenticable
 
       respond_to :json

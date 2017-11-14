@@ -1,6 +1,6 @@
 module Api
   module V1
-    class UserController < ApplicationController
+    class UserController < BaseController
       def show
         respond_with current_user
       end
