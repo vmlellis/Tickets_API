@@ -1,6 +1,8 @@
 class Ticket < ApplicationRecord
   STATUS = %w[new in_progress closed].freeze
 
+  has_many :ticket_topics
+
   belongs_to :created_by, class_name: 'User'
   belongs_to :agent, class_name: 'User'
   belongs_to :closed_by, class_name: 'User', optional: true

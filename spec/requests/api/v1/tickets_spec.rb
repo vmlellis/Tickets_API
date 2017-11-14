@@ -4,9 +4,11 @@ RSpec.describe 'Tickets API', type: :request do
   before { host! 'api.domain.dev' }
   let!(:endpoint) { '/tickets' }
 
+  let!(:admin) { create(:admin) }
   let!(:customer) { create(:customer) }
   let!(:agent) { create(:agent) }
-  let!(:user) { create(:admin)  }
+
+  let!(:user) { admin }
   let(:headers) do
     {
       'Accept' => 'application/vnd.core.v1',
@@ -94,48 +96,122 @@ RSpec.describe 'Tickets API', type: :request do
   end
 
   describe 'PUT /tickets/:id' do
-    context 'when the request params are valid' do
+    let!(:ticket) { create(:ticket, created_by: customer, agent: agent) }
 
-      it 'returns status code 200'
-      it 'updates in the database'
-      it 'returns json data'
+    before do
+      params = { ticket: ticket_params }.to_json
+      put "#{endpoint}/#{ticket.id}", params: params, headers: headers
+    end
+
+    context 'when the request params are valid' do
+      let(:ticket_params) { { title: 'new_title' } }
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'updates in the database' do
+        obj = Ticket.find_by(title: ticket_params[:title])
+        expect(obj).not_to be_nil
+      end
+
+      it 'returns json data' do
+        expect(json_body[:title]).to eq(ticket_params[:title])
+      end
 
       context 'when current user is the agent of the ticket' do
-        it 'returns status code 200'
+        let(:authorization) { agent.auth_token }
+
+        it 'returns status code 200' do
+          expect(response).to have_http_status(200)
+        end
       end
 
       context 'when current user is another customer' do
-        it 'returns status code 401'
+        let(:other_customer) do
+          create(:customer, auth_token: Devise.friendly_token)
+        end
+        let(:authorization) { other_customer.auth_token }
+
+        it 'returns status code 404' do
+          expect(response).to have_http_status(404)
+        end
       end
 
       context 'when current user is another agent' do
-        it 'returns status code 401'
+        let(:other_agent) do
+          create(:customer, auth_token: Devise.friendly_token)
+        end
+        let(:authorization) { other_agent.auth_token }
+
+        it 'returns status code 404' do
+          expect(response).to have_http_status(404)
+        end
       end
     end
 
     context 'when the request params are invalid' do
-      it 'returns status code 422'
-      it 'does not updates in the database'
-      it 'returns the json error for title'
+      let(:ticket_params) { { title: '' } }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'does not updates in the database' do
+        obj = Ticket.find_by(title: ticket_params[:title])
+        expect(obj).to be_nil
+      end
+
+      it 'returns the json error for title' do
+        expect(json_body[:errors]).to have_key(:title)
+      end
     end
   end
 
   describe 'DELETE /tickets/:id' do
+    let!(:ticket) { create(:ticket) }
+    let(:authorization) { admin.auth_token }
+
+    before do
+      delete "#{endpoint}/#{ticket_id}", params: {}, headers: headers
+    end
+
     context 'when the ticket type exists' do
-      it 'returns status code 204'
-      it 'removes from the database'
+      let(:ticket_id) { ticket.id }
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+
+      it 'removes from the database' do
+        expect do
+          Ticket.find(ticket.id)
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
 
       context 'when current user is agent' do
-        it 'returns status code 401'
+        let(:authorization) { agent.auth_token }
+
+        it 'returns status code 401' do
+          expect(response).to have_http_status(401)
+        end
       end
 
       context 'when current user is customer' do
-        it 'returns status code 401'
+        let(:authorization) { customer.auth_token }
+
+        it 'returns status code 401' do
+          expect(response).to have_http_status(401)
+        end
       end
     end
 
     context 'when the ticket type does not exist' do
-      it 'returns status code 404'
+      let(:ticket_id) { 1000 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
     end
   end
 end

@@ -12,12 +12,13 @@
 
 ActiveRecord::Schema.define(version: 20171111180134) do
 
-  create_table "ticket_answers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "ticket_topics", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "ticket_id"
     t.bigint "user_id"
+    t.text "description", null: false
     t.datetime "created_at"
-    t.index ["ticket_id"], name: "index_ticket_answers_on_ticket_id"
-    t.index ["user_id"], name: "index_ticket_answers_on_user_id"
+    t.index ["ticket_id"], name: "index_ticket_topics_on_ticket_id"
+    t.index ["user_id"], name: "index_ticket_topics_on_user_id"
   end
 
   create_table "ticket_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -65,7 +66,7 @@ ActiveRecord::Schema.define(version: 20171111180134) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "ticket_answers", "tickets"
-  add_foreign_key "ticket_answers", "users"
+  add_foreign_key "ticket_topics", "tickets"
+  add_foreign_key "ticket_topics", "users"
   add_foreign_key "tickets", "ticket_types"
 end

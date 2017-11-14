@@ -11,12 +11,14 @@ class User < ApplicationRecord
   has_many  :support_tickets,
             foreign_key: 'agent_id',
             class_name: 'Ticket',
-              dependent: :restrict_with_error
+            dependent: :restrict_with_error
 
   has_many  :closed_tickets,
             foreign_key: 'closed_by_id',
             class_name: 'Ticket',
             dependent: :restrict_with_error
+
+  has_many :ticket_topics
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

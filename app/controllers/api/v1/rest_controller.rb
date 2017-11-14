@@ -39,6 +39,8 @@ module Api
           status = :unprocessable_entity
           render json: { errors: resource.errors }, status: status
         end
+      rescue ActiveRecord::RecordNotFound
+        head :not_found
       end
 
       def destroy

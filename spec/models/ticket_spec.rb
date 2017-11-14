@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Ticket, type: :model do
   let(:ticket) { build(:ticket) }
 
+  it { is_expected.to have_many(:ticket_topics) }
+
   it { is_expected.to belong_to(:created_by).class_name('User') }
   it { is_expected.to belong_to(:agent).class_name('User') }
   it { is_expected.to belong_to(:closed_by).class_name('User') }

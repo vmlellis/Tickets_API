@@ -21,6 +21,8 @@ RSpec.describe User, type: :model do
       .dependent(:restrict_with_error)
   end
 
+  it { is_expected.to have_many(:ticket_topics) }
+
   it { expect(user).to respond_to(:email) }
   it { expect(user).to respond_to(:name) }
   it { expect(user).to respond_to(:password) }

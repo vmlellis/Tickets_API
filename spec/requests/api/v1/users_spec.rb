@@ -18,6 +18,7 @@ RSpec.describe 'Users API', type: :request do
 
   describe 'GET /users' do
     before do
+      create_list(:user, 5)
       get endpoint, params: {}, headers: headers
     end
 
@@ -25,9 +26,13 @@ RSpec.describe 'Users API', type: :request do
       expect(response).to have_http_status(200)
     end
 
-    it 'returns a list of users'
+    it 'returns 6 users from database' do
+      expect(json_body[:records].count).to eq(6)
+    end
 
-    it 'returns total of records'
+    it 'returns total of records equal to 6' do
+      expect(json_body[:total]).to eq(6)
+    end
 
     context 'when current user is customer' do
       let(:customer) { create(:customer) }

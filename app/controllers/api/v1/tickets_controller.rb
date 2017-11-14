@@ -2,6 +2,7 @@ module Api
   module V1
     class TicketsController < RestController
       before_action :authenticate_customer!, only: %i[create]
+      before_action :authenticate_admin!, only: %i[destroy]
 
       def create
         super do |ticket|
@@ -14,9 +15,17 @@ module Api
       private
 
       def resource_params
-        params.fetch(:ticket).permit(
-          :title, :description, :ticket_type_id, :status
-        )
+        params.fetch(:ticket).permit(*permitted_params)
+      end
+
+      def permitted_params
+        if current_user.admin?
+          %w[title description ticket_type_id status agent_id]
+        elsif current_user.customer?
+          %w[title description ticket_type_id]
+        else
+          %w[status]
+        end
       end
 
       def model

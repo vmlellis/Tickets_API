@@ -16,7 +16,7 @@ RSpec.describe 'Ticket Types API', type: :request do
 
   describe 'GET /ticket_types' do
     before do
-      3.times { create(:ticket_type, name: Faker::Job.field ) }
+      3.times { |i| create(:ticket_type, name: "ticket_type_#{i}" ) }
       get endpoint, params: {}, headers: headers
     end
 
