@@ -114,4 +114,43 @@ RSpec.describe 'Auth API', type: :request do
       end
     end
   end
+
+  describe 'POST /auth/sign_in' do
+    let(:headers) do
+      {
+        'Accept' => 'application/vnd.core.v1',
+        'Content-Type' => Mime[:json].to_s
+      }
+    end
+
+    before do
+      post "#{endpoint}/sign_in", params: credentials.to_json, headers: headers
+    end
+
+    context 'when the credentials are correct' do
+      let(:credentials) { { email: user.email, password: '123456' } }
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns the authentication data in headers' do
+        expect(response.headers).to have_key('access-token')
+        expect(response.headers).to have_key('uid')
+        expect(response.headers).to have_key('client')
+      end
+    end
+
+    context 'when the credentials are incorrect' do
+      let(:credentials) { { email: user.email, password: 'invalid' } }
+
+      it 'returns status code 401' do
+        expect(response).to have_http_status(401)
+      end
+
+      it 'returns the json data for the errors' do
+        expect(json_body).to have_key(:errors)
+      end
+    end
+  end
 end
