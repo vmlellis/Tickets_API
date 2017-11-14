@@ -20,6 +20,7 @@ gem 'bcrypt', '~> 3.1', '>= 3.1.11'
 
 # Authentication
 gem 'devise', '~> 4.3'
+gem 'devise_token_auth', '~> 0.1.42'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

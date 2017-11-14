@@ -35,6 +35,13 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       # t.string   :unlock_token # Only if unlock strategy is :email or :both
       # t.datetime :locked_at
 
+      ## Required
+      t.string :provider, null: false, default: 'email'
+      t.string :uid, null: false, default: ''
+
+      ## Tokens
+      t.text :tokens
+
       t.timestamps null: false
     end
 
@@ -42,6 +49,7 @@ class CreateUsers < ActiveRecord::Migration[5.1]
     add_index :users, :reset_password_token, unique: true
     # add_index :users, :confirmation_token,   unique: true
     # add_index :users, :unlock_token,         unique: true
-    add_index :users, :auth_token, unique: true
+    add_index :users, :auth_token,           unique: true
+    add_index :users, %i[uid provider],      unique: true
   end
 end

@@ -1,6 +1,13 @@
 require 'utils'
 
 class User < ApplicationRecord
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable
+
+  include DeviseTokenAuth::Concerns::User
+
   ROLES = %w[customer agent admin].freeze
 
   has_many  :created_tickets,
@@ -19,11 +26,6 @@ class User < ApplicationRecord
             dependent: :restrict_with_error
 
   has_many :ticket_topics
-
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
 
   validates :email, presence: true, uniqueness: true
   validates :name, :role, presence: true
