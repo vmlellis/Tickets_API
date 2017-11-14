@@ -45,19 +45,20 @@ RSpec.describe 'Users API', type: :request do
       end
     end
 
-    context 'when filter params is sent' do
+    context 'when filter and sorting params are sent' do
       let!(:user1) { create(:user, name: 'John Wick') }
       let!(:user2) { create(:user, name: 'Matthew Wick') }
       let!(:user3) { create(:user, name: 'Doug Thomas') }
 
       before do
-        get "#{endpoint}?q[name_cont]=wick", params: {}, headers: headers
+        get_params = 'q[name_cont]=wick&q[s]=name+DESC'
+        get "#{endpoint}?#{get_params}", params: {}, headers: headers
       end
 
       it 'returns only the users matching' do
         returned_user_names = json_body[:records].map { |t| t[:name] }
 
-        expect(returned_user_names).to eq([user1.name, user2.name])
+        expect(returned_user_names).to eq([user2.name, user1.name])
       end
     end
   end

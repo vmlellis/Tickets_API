@@ -2,7 +2,7 @@ module Api
   module V1
     class RestController < ApplicationController
       def index
-        resources = model.ransack(params[:q]).result
+        resources = model.ransack(params[:q]).result.paginate(paginate_opts)
         render json: {
           records: resources,
           total: model.count,
@@ -53,6 +53,10 @@ module Api
 
       def model
         controller_name.classify.constantize
+      end
+
+      def paginate_opts
+        { page: params[:page] || 1, per_page: params[:per_page] || 100 }
       end
     end
   end
