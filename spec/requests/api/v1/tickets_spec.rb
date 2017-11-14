@@ -93,7 +93,49 @@ RSpec.describe 'Tickets API', type: :request do
     end
   end
 
-  describe 'PUT /tickets/:id'
+  describe 'PUT /tickets/:id' do
+    context 'when the request params are valid' do
 
-  describe 'DELETE /tickets/:id'
+      it 'returns status code 200'
+      it 'updates in the database'
+      it 'returns json data'
+
+      context 'when current user is the agent of the ticket' do
+        it 'returns status code 200'
+      end
+
+      context 'when current user is another customer' do
+        it 'returns status code 401'
+      end
+
+      context 'when current user is another agent' do
+        it 'returns status code 401'
+      end
+    end
+
+    context 'when the request params are invalid' do
+      it 'returns status code 422'
+      it 'does not updates in the database'
+      it 'returns the json error for title'
+    end
+  end
+
+  describe 'DELETE /tickets/:id' do
+    context 'when the ticket type exists' do
+      it 'returns status code 204'
+      it 'removes from the database'
+
+      context 'when current user is agent' do
+        it 'returns status code 401'
+      end
+
+      context 'when current user is customer' do
+        it 'returns status code 401'
+      end
+    end
+
+    context 'when the ticket type does not exist' do
+      it 'returns status code 404'
+    end
+  end
 end

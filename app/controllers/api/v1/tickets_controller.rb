@@ -1,12 +1,13 @@
 module Api
   module V1
     class TicketsController < RestController
-      before_action :authenticate_customer!
+      before_action :authenticate_customer!, only: %i[create]
 
       def create
         super do |ticket|
           ticket.created_by = current_user
           ticket.agent = User.random_agent
+          ticket.status = 'new'
         end
       end
 
