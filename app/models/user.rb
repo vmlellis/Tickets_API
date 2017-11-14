@@ -41,7 +41,7 @@ class User < ApplicationRecord
   end
 
   def role_name
-    ROLES[role]
+    ROLES[role.to_i]
   end
 
   def role=(val)
