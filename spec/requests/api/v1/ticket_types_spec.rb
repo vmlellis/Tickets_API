@@ -85,6 +85,23 @@ RSpec.describe 'Ticket Types API', type: :request do
         expect(json_body[:name]).to eq(ticket_type_params[:name])
       end
     end
+
+    context 'when the request params are invalid' do
+      let(:ticket_type_params) { attributes_for(:ticket_type, name: '') }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+
+      it 'does not saves the ticket type in the database' do
+        obj = TicketType.find_by(name: ticket_type_params[:name])
+        expect(obj).to be_nil
+      end
+
+      it 'returns the json error for name' do
+        expect(json_body[:errors]).to have_key(:name)
+      end
+    end
   end
 
   describe 'PUT /ticket_types/:id' do
