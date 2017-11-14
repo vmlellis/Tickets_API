@@ -47,7 +47,7 @@ RSpec.describe 'Auth API', type: :request do
     before { post endpoint, params: user_params.to_json, headers: headers }
 
     context 'when the request params are valid' do
-      let(:user_params) { attributes_for(:user) }
+      let(:user_params) { attributes_for(:user, name: 'a name') }
 
       it 'returns status code 200' do
         expect(response).to have_http_status(200)

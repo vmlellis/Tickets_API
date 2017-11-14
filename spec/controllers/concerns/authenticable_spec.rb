@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe Authenticable do
   controller(ApplicationController) do
     include Authenticable
+
+    def current_user; end
   end
 
   let(:app_controller) { subject }

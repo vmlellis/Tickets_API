@@ -1,6 +1,6 @@
 module Api
   module V1
-    class TicketTopicsController < BaseController
+    class TicketTopicsController < ApplicationController
     end
   end
 end

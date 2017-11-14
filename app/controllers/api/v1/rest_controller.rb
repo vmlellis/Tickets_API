@@ -1,6 +1,6 @@
 module Api
   module V1
-    class RestController < BaseController
+    class RestController < ApplicationController
       def index
         resources = model.ransack(params[:q]).result.paginate(paginate_opts)
         render json: {

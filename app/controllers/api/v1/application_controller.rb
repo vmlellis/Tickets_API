@@ -1,8 +1,11 @@
 module Api
   module V1
-    class BaseController < ActionController::API
+    class ApplicationController < ::ApplicationController
       include DeviseTokenAuth::Concerns::SetUserByToken
       include Authenticable
+
+      alias_method :authenticate_user!, :authenticate_api_v1_user!
+      alias_method :current_user, :current_api_v1_user
 
       respond_to :json
 
