@@ -51,14 +51,23 @@ RSpec.describe 'Users API', type: :request do
       let!(:user3) { create(:user, name: 'Doug Thomas') }
 
       before do
-        get_params = 'q[name_cont]=wick&q[s]=name+DESC'
         get "#{endpoint}?#{get_params}", params: {}, headers: headers
       end
 
+      let(:get_params) { 'q[name_cont]=wick&q[s]=name+DESC' }
+
       it 'returns only the users matching' do
         returned_user_names = json_body[:records].map { |t| t[:name] }
-
         expect(returned_user_names).to eq([user2.name, user1.name])
+      end
+
+      context 'when per_page is 1' do
+        let(:get_params) { 'q[name_cont]=wick&q[s]=name+DESC&per_page=1' }
+
+        it 'expect only 1 user' do
+          returned_user_names = json_body[:records].map { |t| t[:name] }
+          expect(returned_user_names).to eq([user2.name])
+        end
       end
     end
   end
