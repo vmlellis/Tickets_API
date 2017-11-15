@@ -144,7 +144,34 @@ RSpec.describe 'Ticket Topics API', type: :request do
   end
 
   describe 'PUT /topics/:id' do
-    pending
+    let!(:ticket_topic) { create(:ticket_topic, ticket: ticket, user: agent) }
+    let(:ticket_topic_id) { ticket_topic.id }
+
+    before do
+      endpoint = "/tickets/#{ticket_id}/topics/#{ticket_topic_id}"
+      params = { ticket_topic: topic_params }.to_json
+      put endpoint, params: params, headers: headers
+    end
+
+    context 'when the request params are valid' do
+      let(:topic_params) { { description: 'new something' } }
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns json data' do
+        expect(json_body[:description]).to eq(topic_params[:description])
+      end
+    end
+
+    context 'when the request params are invalid' do
+      let(:topic_params) { { description: '' } }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+    end
   end
 
   describe 'DELETE /topics/:id' do
