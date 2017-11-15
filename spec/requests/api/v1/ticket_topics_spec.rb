@@ -108,7 +108,39 @@ RSpec.describe 'Ticket Topics API', type: :request do
   end
 
   describe 'POST /topics' do
-    pending
+    before do
+      params = { ticket_topic: topic_params }.to_json
+      post "/tickets/#{ticket_id}/topics", params: params, headers: headers
+    end
+
+    context 'when the request params are valid' do
+      let(:topic_params) { { description: 'something' } }
+
+      it 'returns status code 201' do
+        expect(response).to have_http_status(201)
+      end
+
+      it 'saves in the database' do
+        obj = TicketTopic.find_by(description: topic_params[:description])
+        expect(obj).not_to be_nil
+      end
+
+      it 'returns json data for the created ticket topic' do
+        expect(json_body[:description]).to eq(topic_params[:description])
+      end
+
+      it 'assigns to the current user' do
+        expect(json_body[:user_id]).to eq(user.id)
+      end
+    end
+
+    context 'when the request params are invalid' do
+      let(:topic_params) { { description: '' } }
+
+      it 'returns status code 422' do
+        expect(response).to have_http_status(422)
+      end
+    end
   end
 
   describe 'PUT /topics/:id' do

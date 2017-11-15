@@ -1,7 +1,18 @@
 module Api
   module V1
     class TicketTopicsController < RestController
+
+      def create
+        super do |ticket_topic|
+          ticket_topic.user = current_user
+        end
+      end
+
       private
+
+      def resource_params
+        params.fetch(:ticket_topic).permit(:description)
+      end
 
       def model
         ticket.ticket_topics

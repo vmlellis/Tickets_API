@@ -86,7 +86,7 @@ RSpec.describe 'Tickets API', type: :request do
         expect(obj).not_to be_nil
       end
 
-      it 'returns json data for the created ticket type' do
+      it 'returns json data for the created ticket' do
         expect(json_body[:description]).to eq(ticket_params[:description])
       end
 
