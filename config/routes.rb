@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       resources :tickets, only: %i[index show create update destroy] do
         resources :ticket_topics,
                   path: 'topics',
-                  only: %i[index show create update]
+                  only: %i[index show create update destroy]
       end
     end
   end

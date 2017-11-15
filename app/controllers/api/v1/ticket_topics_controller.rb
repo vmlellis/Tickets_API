@@ -1,6 +1,7 @@
 module Api
   module V1
     class TicketTopicsController < RestController
+      before_action :authenticate_admin!, only: %i[destroy]
 
       def create
         super do |ticket_topic|

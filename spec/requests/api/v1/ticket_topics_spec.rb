@@ -175,6 +175,50 @@ RSpec.describe 'Ticket Topics API', type: :request do
   end
 
   describe 'DELETE /topics/:id' do
-    pending
+    let!(:ticket_topic) { create(:ticket_topic, ticket: ticket, user: agent) }
+    let(:auth_data) { admin.create_new_auth_token }
+
+    before do
+      endpoint = "/tickets/#{ticket_id}/topics/#{ticket_topic_id}"
+      delete endpoint, params: {}, headers: headers
+    end
+
+    context 'when topic exists in database' do
+      let(:ticket_topic_id) { ticket_topic.id }
+
+      it 'returns status code 204' do
+        expect(response).to have_http_status(204)
+      end
+
+      it 'removes from the database' do
+        expect do
+          TicketTopic.find(ticket_topic.id)
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      context 'when current user is agent' do
+        let(:auth_data) { agent.create_new_auth_token }
+
+        it 'returns status code 401' do
+          expect(response).to have_http_status(401)
+        end
+      end
+
+      context 'when current user is customer' do
+        let(:auth_data) { customer.create_new_auth_token }
+
+        it 'returns status code 401' do
+          expect(response).to have_http_status(401)
+        end
+      end
+    end
+
+    context 'when topic not exists in database' do
+      let(:ticket_topic_id) { 1000 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
+    end
   end
 end
