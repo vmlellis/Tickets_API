@@ -40,14 +40,26 @@ RSpec.describe 'Tickets API', type: :request do
   describe 'GET /tickets/:id' do
     let(:ticket) { create(:ticket, created_by: customer, agent: agent) }
 
-    before { get "#{endpoint}/#{ticket.id}", params: {}, headers: headers }
+    before { get "#{endpoint}/#{ticket_id}", params: {}, headers: headers }
 
-    it 'returns status code 200' do
-      expect(response).to have_http_status(200)
+    context 'when ticket exists in database' do
+      let(:ticket_id) { ticket.id }
+
+      it 'returns status code 200' do
+        expect(response).to have_http_status(200)
+      end
+
+      it 'returns the json for ticket' do
+        expect(json_body[:title]).to eq(ticket.title)
+      end
     end
 
-    it 'returns the json for ticket' do
-      expect(json_body[:title]).to eq(ticket.title)
+    context 'when ticket not exists in database' do
+      let(:ticket_id) { 1000 }
+
+      it 'returns status code 404' do
+        expect(response).to have_http_status(404)
+      end
     end
   end
 
@@ -131,7 +143,7 @@ RSpec.describe 'Tickets API', type: :request do
 
       context 'when current user is another customer' do
         let(:other_customer) do
-          create(:customer, auth_token: Devise.friendly_token)
+          create(:customer)
         end
         let(:auth_data) { other_customer.create_new_auth_token }
 
@@ -142,7 +154,7 @@ RSpec.describe 'Tickets API', type: :request do
 
       context 'when current user is another agent' do
         let(:other_agent) do
-          create(:customer, auth_token: Devise.friendly_token)
+          create(:customer)
         end
         let(:auth_data) { other_agent.create_new_auth_token }
 

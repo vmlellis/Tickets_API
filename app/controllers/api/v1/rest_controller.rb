@@ -8,6 +8,8 @@ module Api
           total: model.count,
           filtered: resources.count
         }
+      rescue ActiveRecord::RecordNotFound
+        head :not_found
       end
 
       def show

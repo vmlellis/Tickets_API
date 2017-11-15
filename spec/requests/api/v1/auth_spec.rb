@@ -153,8 +153,7 @@ RSpec.describe 'Auth API', type: :request do
   end
 
   describe 'DELETE /auth/sign_out' do
-    let!(:user) { create(:user, auth_token: 'abc123xyz') }
-    let(:auth_token) { user.auth_token }
+    let!(:user) { create(:user) }
 
     before { delete "#{endpoint}/sign_out", params: {}, headers: headers }
 
@@ -162,7 +161,7 @@ RSpec.describe 'Auth API', type: :request do
       expect(response).to have_http_status(200)
     end
 
-    it 'changes the user auth token' do
+    it 'changes the user access-token' do
       user.reload
       expect(user).not_to be_valid_token(
         auth_data['access-token'], auth_data['client']
