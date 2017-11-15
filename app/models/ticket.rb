@@ -11,6 +11,14 @@ class Ticket < ApplicationRecord
   validates :title, :description, :created_by_id, :agent_id, :ticket_type_id,
             presence: true
 
+  scope :status_new, -> { where(status: STATUS.index('new')) }
+  scope :status_in_progress, -> { where(status: STATUS.index('in_progress')) }
+  scope :status_closed, -> { where(status: STATUS.index('closed')) }
+
+  scope :closed_in_last_month, lambda {
+    where('DATE(closed_at) >= ?', 1.month.ago.to_date)
+  }
+
   def status_name
     STATUS[status.to_i]
   end

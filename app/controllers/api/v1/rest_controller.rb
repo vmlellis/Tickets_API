@@ -57,7 +57,7 @@ module Api
       end
 
       def paginate_opts
-        { page: params[:page] || 1, per_page: params[:per_page] || 100 }
+        { page: params[:page] || 1, per_page: params[:per_page] || 10 }
       end
     end
   end

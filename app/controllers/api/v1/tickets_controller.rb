@@ -29,6 +29,14 @@ module Api
       end
 
       def model
+        if action_name == 'index' && params[:report_closed]
+          model_by_role.status_closed.closed_in_last_month
+        else
+          model_by_role
+        end
+      end
+
+      def model_by_role
         return current_user.created_tickets if current_user.customer?
         return current_user.support_tickets if current_user.agent?
         Ticket.all
