@@ -1,8 +1,6 @@
 require 'api_version_constraint'
 
 Rails.application.routes.draw do
-  get '/', to: 'application#index'
-
   api_opts = {
     defaults: { format: :json }, constraints: { subdomain: 'api' }, path: '/'
   }
@@ -12,6 +10,7 @@ Rails.application.routes.draw do
       constraints: ApiVersionConstraint.new(version: 1, default: true)
     }
     namespace :v1, v1_opts do
+      get '/', to: 'application#index'
       mount_devise_token_auth_for 'User', at: 'auth', controllers: {
         registrations: 'api/v1/auth/registrations'
       }
@@ -26,4 +25,6 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  get '/', to: 'application#index'
 end
