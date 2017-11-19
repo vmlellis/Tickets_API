@@ -1,8 +1,22 @@
 module Authenticable
-  User::ROLES.each do |role|
-    define_method("authenticate_#{role}!") do
-      return if [role, 'admin'].include?(current_user.role_name)
-      render json: { error: 'Not authorized' }, status: :unauthorized
-    end
+  def authenticate_admin!
+    return if current_user.role_name == 'admin'
+    not_authorized
+  end
+
+  def authenticate_agent!
+    return if %w[agent admin].include?(current_user.role_name)
+    not_authorized
+  end
+
+  def authenticate_customer!
+    return if %w[customer admin].include?(current_user.role_name)
+    not_authorized
+  end
+
+  private
+
+  def not_authorized
+    render json: { error: 'Not authorized' }, status: :unauthorized
   end
 end
