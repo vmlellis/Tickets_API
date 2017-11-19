@@ -35,7 +35,24 @@ class Ticket < ApplicationRecord
     end
   end
 
+  def created_by_name
+    created_by.try(:name)
+  end
+
+  def closed_by_name
+    closed_by.try(:name)
+  end
+
+  def ticket_type_name
+    ticket_type.try(:name)
+  end
+
   def as_json(_ = {})
-    super.merge(status: status_name)
+    super.merge(
+      status: status_name,
+      created_by_name: created_by_name,
+      closed_by_name: closed_by_name,
+      ticket_type_name: ticket_type_name
+    )
   end
 end

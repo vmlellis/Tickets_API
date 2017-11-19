@@ -32,8 +32,9 @@ module Api
 
       def update
         resource = model.find(params[:id])
-        yield resource if block_given?
-        if resource.update(resource_params)
+        update_attributes = resource_params
+        yield resource, update_attributes if block_given?
+        if resource.update(update_attributes)
           render json: resource, status: :ok
         else
           status = :unprocessable_entity
