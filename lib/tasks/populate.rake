@@ -1,3 +1,5 @@
+require 'faker'
+
 namespace :populate do
   desc 'Populate to test in development'
   task dev: :environment do
@@ -22,6 +24,17 @@ namespace :populate do
       'Billing Support', 'Other'
     ].each do |type|
       TicketType.create(name: type)
+    end
+
+    5.times do
+      Ticket.create(
+        title: Faker::Lorem.sentence,
+        description: Faker::Lorem.paragraph,
+        created_by: User.customers.order('RAND()').first,
+        created_at: Faker::Time.backward(2),
+        ticket_type: TicketType.order('RAND()').first,
+        agent: User.random_agent
+      )
     end
   end
 end

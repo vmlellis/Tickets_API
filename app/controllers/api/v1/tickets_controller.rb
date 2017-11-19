@@ -12,6 +12,15 @@ module Api
         end
       end
 
+      def update
+        super do |ticket|
+          if changed_to_closed?(ticket)
+            ticket.closed_by = current_user
+            ticket.closed_at = Time.now
+          end
+        end
+      end
+
       private
 
       def resource_params
@@ -40,6 +49,12 @@ module Api
         return current_user.created_tickets if current_user.customer?
         return current_user.support_tickets if current_user.agent?
         Ticket.all
+      end
+
+      def changed_to_closed?(ticket)
+        closed_status = Ticket::STATUS.index('closed')
+        resource_params[:status].to_s == closed_status.to_s &&
+          ticket.status != closed_status
       end
     end
   end

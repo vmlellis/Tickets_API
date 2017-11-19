@@ -1,4 +1,8 @@
 class Ticket < ApplicationRecord
+  include ActiveModel::Dirty
+
+  define_attribute_methods
+
   STATUS = %w[new in_progress closed].freeze
 
   has_many :ticket_topics
