@@ -26,7 +26,7 @@ module Api
           render json: resource, status: :created
         else
           status = :unprocessable_entity
-          render json: { errors: resource.errors }, status: status
+          render json: json_errors(resource.errors), status: status
         end
       end
 
@@ -37,7 +37,7 @@ module Api
           render json: resource, status: :ok
         else
           status = :unprocessable_entity
-          render json: { errors: resource.errors }, status: status
+          render json: json_errors(resource.errors), status: status
         end
       rescue ActiveRecord::RecordNotFound
         head :not_found
@@ -56,6 +56,10 @@ module Api
 
       def model
         controller_name.classify.constantize
+      end
+
+      def json_errors(errors)
+        { errors: errors.to_hash.merge(full_messages: errors.full_messages) }
       end
 
       def paginate_opts
