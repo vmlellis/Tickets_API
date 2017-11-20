@@ -47,12 +47,17 @@ class Ticket < ApplicationRecord
     ticket_type.try(:name)
   end
 
+  def agent_name
+    agent.try(:name)
+  end
+
   def as_json(_ = {})
     super.merge(
       status: status_name,
       created_by_name: created_by_name,
       closed_by_name: closed_by_name,
-      ticket_type_name: ticket_type_name
+      ticket_type_name: ticket_type_name,
+      agent_name: agent_name
     )
   end
 end
