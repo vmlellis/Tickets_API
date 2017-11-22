@@ -12,7 +12,7 @@ module Api
       before_action :authenticate_user!
 
       def index
-        { version: 1 }
+        render json: { version: 1 }
       end
     end
   end
