@@ -53,6 +53,9 @@ group :test do
 
   # Shoulda Matchers
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.2'
+
+  # Strategies for cleaning databases
+  gem 'database_cleaner', '~> 1.6', '>= 1.6.2'
 end
 
 group :development do
